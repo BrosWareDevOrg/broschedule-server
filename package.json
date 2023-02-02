@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/brosware/broschedule-server/issues"
   },
-  "homepage": "https://github.com/brosware/broschedule-server#readme"
+  "homepage": "https://github.com/brosware/broschedule-server#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
