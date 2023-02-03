@@ -1,7 +1,9 @@
 import cors from "cors";
-const express = require("express");
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
-require("dotenv").config();
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -12,6 +14,16 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+mongoose.connect(`${process.env.MONGO_URL}`, (error) => {
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.log("Failed connection to database", error);
+  } else {
+    // eslint-disable-next-line no-console
+    console.log("Connected to database");
+    app.listen(port, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Server ready on port ${port}`);
+    });
+  }
 });
