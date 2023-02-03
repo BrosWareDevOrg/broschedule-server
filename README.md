@@ -2,10 +2,6 @@
 
 After clone repo, open toy prefer comand console and execute:
 
-> `npm install`
-
-> `npm run dev`
-
 ### Install dependencies
 
     npm install
@@ -49,7 +45,7 @@ You will also see any lint errors in the console.
 
 |Photo | Name  | Mail | Github
 | :-----: | :-----: | :-----: | :-----: |
-<img src="https://avatars.githubusercontent.com/u/84218482?v=4" height="50" width="50">| Dario Marañes | dario.sjs@gmail.com | [@mara666](https://github.com/mara666)
+<img src="https://avatars.githubusercontent.com/u/25555726?v=4" height="50" width="50">| Dario Marañes | dario.sjs@gmail.com | [@mara666](https://github.com/mara666)
 <img src="https://avatars.githubusercontent.com/u/84218482?v=4" height="50" width="50">| Damian Palavecino | damianpalavecino25@gmail.com | [@DamianPalavecino](https://github.com/DamianPalavecino)
 <img src="https://avatars.githubusercontent.com/u/85576085?v=4" height="50" width="50">| Ernesto Bessone | ejubessone@hotmail.com | [@eju97](https://github.com/Eju97)
 <img src="https://avatars.githubusercontent.com/u/96196361?v=4" height="50" width="50">| Julian Flores | julianfloresdev@gmail.com | [@JulianFloresDev](https://github.com/JulianFloresDev)
