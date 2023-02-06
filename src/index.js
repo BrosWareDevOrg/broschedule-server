@@ -11,7 +11,7 @@ app.use(cors());
 
 const port = process.env.PORT || 5001;
 
-app.use(router);
+app.use('/api', router);
 
 mongoose.connect(`${process.env.MONGO_URL}`, (error) => {
   if (error) {

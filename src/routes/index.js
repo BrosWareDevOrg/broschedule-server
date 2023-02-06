@@ -1,9 +1,9 @@
 import express from 'express';
 
+import serviceProvider from './serviceProvider.js';
+
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+router.use('/provider', serviceProvider);
 
 export default router;
