@@ -1,12 +1,17 @@
 import express from "express";
-import { getProviders } from "../controllers/serviceproviders.js";
+import {
+  getProviders,
+  getOneProvider,
+  createServiceProvider,
+} from "../controllers/serviceproviders.js";
 
 const serviceProvider = express.Router();
 
 serviceProvider
-  .get('/', getProviders)
-  .post('/',)
-  .put('/',)
-  .delete('/',)
+  .get("/", getProviders)
+  .get("/:id", getOneProvider)
+  .post("/", createServiceProvider)
+  .put("/:id")
+  .delete("/:id");
 
 export default serviceProvider;

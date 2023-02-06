@@ -31,9 +31,13 @@ const serviceProviderSchema = new Schema({
     required: true
   },
   //Define an array of turns already occupied by users.
-  turns: {
+  appointments: {
     type: Schema.Types.ObjectId,
-    ref: 'Turn',
+    ref: 'Appointment',
+    required: false
+  },
+  isActive: {
+    type: Boolean,
     required: true
   }
 }, { timestamps: true });
