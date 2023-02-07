@@ -1,8 +1,8 @@
-import Appointments from '../models/Appointment';
+import Appointments from '../models/Appointment.js';
 
 export const getAppointments = async (req, res) => {
   try {
-    const appointments = await Appointments.find({});
+    const appointments = await Appointments.find(req.query);
     if (!appointments.length) {
       return res.status(404).json({
         message: 'Appointments not found',
@@ -17,7 +17,7 @@ export const getAppointments = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
-      message: error || 'Error retrieving appointments',
+      message: err || 'Error retrieving appointments',
       data: undefined,
       error: true,
     });
@@ -26,7 +26,7 @@ export const getAppointments = async (req, res) => {
 
 export const getAppointmentById = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const appointment = await Appointments.findById(id);
     if (!appointment) {
       return res.status(404).json({
@@ -42,7 +42,7 @@ export const getAppointmentById = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
-      message: error || 'Error retrieving appointment',
+      message: err || 'Error retrieving appointment',
       data: undefined,
       error: true,
     });
@@ -51,16 +51,23 @@ export const getAppointmentById = async (req, res) => {
 
 export const createAppointment = async (req, res) => {
   try {
-    const appointment = new Appointments(req.body);
-    const result = await appointment.save();
+    const appointment = await Appointments.create(req.body);
+    if (!appointment) {
+      return res.status(404).json({
+        message: 'There was an error when creating the appointment',
+        error: true,
+        data: undefined,
+      });
+    }
+    await appointment.save();
     return res.status(201).json({
       message: 'Appointment created successfully!',
-      data: result,
+      data: appointment,
       error: false,
     });
-  } catch (error) {
+  } catch (err) {
     return res.status(400).json({
-      message: error || 'Appointment creation failed',
+      message: err || 'Appointment creation failed',
       data: undefined,
       error: true,
     });
@@ -81,7 +88,7 @@ export const deleteAppointment = async (req, res) => {
     return res.status(204).json();
   } catch (err) {
     return res.status(400).json({
-      message: error || 'Error deleting appointment',
+      message: err || 'Error deleting appointment',
       data: undefined,
       error: true,
     });
@@ -110,7 +117,7 @@ export const updateAppointment = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
-      message: error || 'Error updating appointment',
+      message: err || 'Error updating appointment',
       data: undefined,
       error: true,
     });
