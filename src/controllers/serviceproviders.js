@@ -3,7 +3,10 @@ import ServiceProviders from "../models/ServiceProviders.js";
 export const createServiceProvider = async (req, res) => {
   try {
     const providers = await ServiceProviders.find().populate("appointments");
-    const newProvider = await ServiceProviders.create(req.body);
+    const newProvider = await ServiceProviders.create({
+      ...req.body,
+      isActive: true,
+    });
     const isProviderRegister = providers.some(
       (prov) => prov.email === newProvider.email
     );
@@ -46,8 +49,9 @@ export const getProviders = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Can't access service delivery list. Try in a few minutes.",
+      message: `Unespected error ${error}.`,
       error: true,
+      data: undefined,
     });
   }
 };
@@ -73,8 +77,73 @@ export const getOneProvider = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Can't access service delivery list. Try in a few minutes.",
+      message: `Unespected error ${error}.`,
       error: true,
+      data: undefined,
+    });
+  }
+};
+
+export const updateProviderInfo = async (req, res) => {
+  try {
+    const { body } = req;
+    const { id } = req.params;
+    const provider = await ServiceProviders.findByID(id);
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "User not found",
+        error: true,
+        data: undefined,
+      });
+    }
+
+    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body);
+
+    return res.status(200).json({
+      message: "Provider updated successfully!",
+      error: false,
+      data: providerToUpdate,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Unespected error ${error}.`,
+      error: true,
+      data: undefined,
+    });
+  }
+};
+
+export const removeProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const provider = await ServiceProviders.findById(id);
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "User not found",
+        error: true,
+        data: undefined,
+      });
+    }
+
+    const providerDeleted = await ServiceProviders.findByIdAndUpdate(
+      id,
+      {
+        isActive: false,
+      }
+    );
+
+    return res.status(200).json({
+      message: "Account deleted successfully!",
+      error: false,
+      data: providerDeleted,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Unespected error ${error}.`,
+      error: true,
+      data: undefined,
     });
   }
 };

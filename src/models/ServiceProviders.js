@@ -31,11 +31,12 @@ const serviceProviderSchema = new Schema({
     required: true
   },
   //Define an array of turns already occupied by users.
-  appointments: {
-    type: Schema.Types.ObjectId,
-    ref: 'Appointment',
-    required: false
-  },
+  appointments: [
+    {
+      _id: false,
+      appointment: { type: Schema.Types.ObjectId, ref: 'Appointments', required: false }
+    }
+  ],
   isActive: {
     type: Boolean,
     required: true
