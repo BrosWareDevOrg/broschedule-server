@@ -1,8 +1,11 @@
+import { isValidId } from "../helpers/idValidation.js";
 import ServiceProviders from "../models/ServiceProviders.js";
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providers = await ServiceProviders.find().populate("appointments");
+    const providers = await ServiceProviders.find(req.query).populate(
+      "appointments"
+    );
     const newProvider = await ServiceProviders.create({
       ...req.body,
       isActive: true,
@@ -12,7 +15,7 @@ export const createServiceProvider = async (req, res) => {
     );
     if (isProviderRegister) {
       return res.status(451).json({
-        message: "This email has already register",
+        message: "This email has already been registered",
         error: true,
         data: req.body,
       });
@@ -34,7 +37,9 @@ export const createServiceProvider = async (req, res) => {
 
 export const getProviders = async (req, res) => {
   try {
-    const providerList = await ServiceProviders.find().populate("appointments");
+    const providerList = await ServiceProviders.find(req.query).populate(
+      "appointments"
+    );
     if (providerList.length === 0) {
       return res.status(404).json({
         mesage: "Service Provider list is empty. Register one first!",
@@ -58,7 +63,14 @@ export const getProviders = async (req, res) => {
 
 export const getByIdProvider = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
+    if (!isValidId(id)) {
+      return res.status(400).json({
+        message: 'Invalid "id" on request',
+        error: true,
+        data: undefined,
+      });
+    }
     const provider = await ServiceProviders.findById(id).populate(
       "appointments"
     );
@@ -88,18 +100,22 @@ export const updateProviderInfo = async (req, res) => {
   try {
     const { body } = req;
     const { id } = req.params;
-    const provider = await ServiceProviders.findByID(id);
+    if (!isValidId(id)) {
+      return res.status(400).json({
+        message: 'Invalid "id" on request',
+        error: true,
+        data: undefined,
+      });
+    }
+    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body);
 
-    if (!provider) {
+    if (!providerToUpdate) {
       return res.status(404).json({
         message: "User not found",
         error: true,
         data: undefined,
       });
     }
-
-    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body);
-
     return res.status(200).json({
       message: "Provider updated successfully!",
       error: false,
@@ -117,6 +133,13 @@ export const updateProviderInfo = async (req, res) => {
 export const removeProvider = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!isValidId(id)) {
+      return res.status(400).json({
+        message: 'Invalid "id" on request',
+        error: true,
+        data: undefined,
+      });
+    }
     const provider = await ServiceProviders.findById(id);
 
     if (!provider) {
@@ -127,12 +150,9 @@ export const removeProvider = async (req, res) => {
       });
     }
 
-    const providerDeleted = await ServiceProviders.findByIdAndUpdate(
-      id,
-      {
-        isActive: false,
-      }
-    );
+    const providerDeleted = await ServiceProviders.findByIdAndUpdate(id, {
+      isActive: false,
+    });
 
     return res.status(200).json({
       message: "Account deleted successfully!",
