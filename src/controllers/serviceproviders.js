@@ -7,8 +7,7 @@ export const createServiceProvider = async (req, res) => {
       "appointments"
     );
     const newProvider = await ServiceProviders.create({
-      ...req.body,
-      isActive: true,
+      ...req.body
     });
     const isProviderRegister = providers.some(
       (prov) => prov.email === newProvider.email
