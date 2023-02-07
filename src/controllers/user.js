@@ -5,10 +5,7 @@ export const getUsers = async (req, res) => {
     try{
         const users = await Users.find(req.query);
         if(!users) {
-            throw new Error({
-                message: 'Users not found',
-                status: 404,
-            });
+            return res.status(404).json({ message: 'Users not found', error: true, data: undefined })
         }
         if (users.length === 0) {
             return res.status(200).json({
@@ -34,17 +31,11 @@ export const getUserById = async (req, res) => {
     try{
         const { id } = req.params;
         if(!isValidObjectId(id)) {
-            throw new Error({
-                message: 'Invalid User ID',
-                status: 400,
-            })
+            return res.status(400).json({ message: 'Invalid User ID', error: true, data: undefined })
         }
         const user = await Users.findById(id);
         if(!user){
-            throw new Error({
-                message: 'User not found',
-                status: 404,
-            });
+            return res.status(404).json({ message: 'User not found', error: true, data: undefined })
         };
         return res.status(200).json({
             message: 'User found successfully',
@@ -85,19 +76,13 @@ export const deleteUser = async(req, res) => {
     try{
         const { id } = req.params;
         if(!isValidObjectId(id)) {
-            throw new Error({
-                message: 'Invalid User ID',
-                status: 400,
-            });
+            return res.status(400).json({ message: 'Invalid User ID', error: true, data: undefined })
         }
         const result = await Users.findByIdAndUpdate(id, {
             isActive: false,
         });
         if(!result) {
-            throw new Error({
-                message: 'User not found',
-                status: 404,
-            });
+            return res.status(404).json({ message: 'User not found', error: true, data: undefined })
         }
         return res.status(200).json({
             message: "Account deleted successfully!",
@@ -116,17 +101,11 @@ export const updateUser = async(req, res) => {
     try{
         const { id } = req.params;
         if(!isValidObjectId(id)) {
-            throw new Error({
-                message: 'Invalid User ID',
-                status: 400,
-            })
+            return res.status(400).json({ message: 'Invalid User ID', error: true, data: undefined })
         }
         const result = await Users.findByIdAndUpdate(id, req.body, { new: true })
         if(!result){
-            throw new Error({
-                message: 'User not found',
-                status: 404,
-            })
+            return res.status(404).json({ message: 'User not found', error: true, data: undefined })
         }
         return res.status(200).json({
             message: 'User updated successfully',
