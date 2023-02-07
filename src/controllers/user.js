@@ -1,4 +1,4 @@
-import Users from '../models/User';
+import Users from '../models/User.js';
 import { isValidObjectId } from 'mongoose';
 
 export const getUsers = async (req, res) => {
@@ -58,3 +58,25 @@ export const getUserById = async (req, res) => {
         })
     }
 };
+
+export const createUser = async(req, res) => {
+    try{
+        const newUser = new Users({
+            name: req.body.name,
+            lastName: req.body.lastName,
+            phone: req.body.phone,
+            email: req.body.email,
+        });
+        const result = await newUser.save();
+        return res.status(201).json({
+            message: 'User created successfully',
+            data: result,
+            error: false,
+        });
+        } catch (error) {
+            return res.status(error.status || 500).json({
+                message: error.message || error,
+                error: true,
+            })
+        }
+}
