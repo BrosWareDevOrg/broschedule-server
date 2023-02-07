@@ -29,3 +29,32 @@ export const getUsers = async (req, res) => {
         })
     }
 };
+
+export const getUserById = async (req, res) => {
+    try{
+        const { id } = req.params;
+        if(!isValidObjectId(id)) {
+            throw new Error({
+                message: 'Invalid User ID',
+                status: 400,
+            })
+        }
+        const user = await Users.findById(id);
+        if(!user){
+            throw new Error({
+                message: 'User not found',
+                status: 404,
+            });
+        };
+        return res.status(200).json({
+            message: 'User found successfully',
+            data: user,
+            error: false,
+        })
+    } catch(error){
+        return res.status(error.status || 500).json({
+            message: error.message || error,
+            error: true,
+        })
+    }
+};
