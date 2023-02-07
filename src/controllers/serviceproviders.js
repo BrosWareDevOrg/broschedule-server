@@ -107,7 +107,7 @@ export const updateProviderInfo = async (req, res) => {
         data: undefined,
       });
     }
-    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body);
+    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body, { new: true });
 
     if (!providerToUpdate) {
       return res.status(404).json({
