@@ -80,3 +80,33 @@ export const createUser = async(req, res) => {
             })
         }
 }
+
+export const deleteUser = async(req, res) => {
+    try{
+        const { id } = req.params;
+        if(!isValidObjectId(id)) {
+            throw new Error({
+                message: 'Invalid User ID',
+                status: 400,
+            });
+        }
+        const result = await Users.findByIdAndUpdate(id, {
+            isActive: false,
+        });
+        if(!result) {
+            throw new Error({
+                message: 'User not found',
+                status: 404,
+            });
+        }
+        return res.status(204).json({
+            data: result,
+            error: false,
+        });
+    } catch (error) {
+        return res.status(error.status || 500).json({
+            message: error.message || error,
+            error: true,
+        })
+    }
+}
