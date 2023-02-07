@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getProviders,
-  getOneProvider,
+  getByIdProvider,
   createServiceProvider,
   updateProviderInfo,
   removeProvider
@@ -11,7 +11,7 @@ const serviceProvider = express.Router();
 
 serviceProvider
   .get("/", getProviders)
-  .get("/:id", getOneProvider)
+  .get("/:id", getByIdProvider)
   .post("/", createServiceProvider)
   .put("/:id", updateProviderInfo)
   .delete("/:id", removeProvider);

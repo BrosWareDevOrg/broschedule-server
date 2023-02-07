@@ -25,7 +25,7 @@ export const createServiceProvider = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: `Unespected error ${error}.`,
+      message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
     });
@@ -49,14 +49,14 @@ export const getProviders = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: `Unespected error ${error}.`,
+      message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
     });
   }
 };
 
-export const getOneProvider = async (req, res) => {
+export const getByIdProvider = async (req, res) => {
   try {
     const { id } = req.body;
     const provider = await ServiceProviders.findById(id).populate(
@@ -77,7 +77,7 @@ export const getOneProvider = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: `Unespected error ${error}.`,
+      message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
     });
@@ -107,7 +107,7 @@ export const updateProviderInfo = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: `Unespected error ${error}.`,
+      message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
     });
@@ -141,7 +141,7 @@ export const removeProvider = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: `Unespected error ${error}.`,
+      message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
     });
