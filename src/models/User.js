@@ -7,8 +7,9 @@ const userSchema = new Schema({
     lastName: { type: String, required: true},
     phone: { type: String, required: true},
     email: { type: String, required: true},
-    isActive: { type: Boolean, default: false},
-    appointment: { type: Array, required: true }
+    isActive: { type: Boolean, default: true},
+    // enable appointment when appointment's schema is added
+    // appointment: { type: Array, required: true }
 });
 
 export default mongoose.model('Users', userSchema);
