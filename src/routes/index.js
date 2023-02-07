@@ -1,9 +1,7 @@
 import express from 'express';
-
+import appointmentRouter from './appointments.js';
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+router.use('/appointments', appointmentRouter);
 
 export default router;
