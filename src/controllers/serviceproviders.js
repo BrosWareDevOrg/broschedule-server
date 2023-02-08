@@ -3,11 +3,9 @@ import ServiceProviders from "../models/ServiceProviders.js";
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providers = await ServiceProviders.find(req.query).populate(
-      "appointments"
-    );
+    const providers = await ServiceProviders.find(req.query);
     const newProvider = await ServiceProviders.create({
-      ...req.body
+      ...req.body,
     });
     const isProviderRegister = providers.some(
       (prov) => prov.email === newProvider.email
@@ -37,7 +35,7 @@ export const createServiceProvider = async (req, res) => {
 export const getProviders = async (req, res) => {
   try {
     const providerList = await ServiceProviders.find(req.query).populate(
-      "appointments"
+      "appointments.appointment"
     );
     if (providerList.length === 0) {
       return res.status(404).json({
@@ -71,7 +69,7 @@ export const getByIdProvider = async (req, res) => {
       });
     }
     const provider = await ServiceProviders.findById(id).populate(
-      "appointments"
+      "appointments.appointment"
     );
     if (!provider) {
       return res.status(404).json({
@@ -106,7 +104,11 @@ export const updateProviderInfo = async (req, res) => {
         data: undefined,
       });
     }
-    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body, { new: true });
+    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(
+      id,
+      body,
+      { new: true }
+    );
 
     if (!providerToUpdate) {
       return res.status(404).json({

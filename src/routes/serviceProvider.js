@@ -14,6 +14,6 @@ serviceProvider
   .get("/:id", getByIdProvider)
   .post("/", createServiceProvider)
   .put("/:id", updateProviderInfo)
-  .delete("/:id", removeProvider);
+  .put("/:id", removeProvider);
 
 export default serviceProvider;

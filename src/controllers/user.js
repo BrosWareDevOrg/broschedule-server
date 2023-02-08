@@ -3,7 +3,7 @@ import { isValidObjectId } from "mongoose";
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await Users.find(req.query);
+    const users = await Users.find(req.query).populate('appointments.appointment');
     if (!users) {
       return res
         .status(404)
@@ -37,7 +37,7 @@ export const getUserById = async (req, res) => {
         .status(400)
         .json({ message: "Invalid User ID", error: true, data: undefined });
     }
-    const user = await Users.findById(id);
+    const user = await Users.findById(id).populate('appointments.appointment');
     if (!user) {
       return res
         .status(404)
