@@ -13,6 +13,6 @@ router
   .get('/:id', getAppointmentById)
   .post('/', createAppointment)
   .put('/:id', updateAppointment)
-  .put('/:id', deleteAppointment);
+  .delete('/:id', deleteAppointment);
 
 export default router;
