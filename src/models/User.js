@@ -10,7 +10,7 @@ const userSchema = new Schema({
     isActive: { type: Boolean, default: true },
     appointments: [
         {
-            appointment: { _id: false, type: Schema.Types.ObjectId, required: true },
+            appointment: { _id: false, type: Schema.Types.ObjectId, ref: 'Appointments', required: true },
         }
     ]
 });
