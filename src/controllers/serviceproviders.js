@@ -1,20 +1,18 @@
-import { isValidId } from "../helpers/idValidation.js";
-import ServiceProviders from "../models/ServiceProviders.js";
+import { isValidId } from '../helpers/idValidation.js';
+import ServiceProviders from '../models/ServiceProviders.js';
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providers = await ServiceProviders.find(req.query).populate(
-      "appointments"
-    );
+    const providers = await ServiceProviders.find(req.query);
     const newProvider = await ServiceProviders.create({
-      ...req.body
+      ...req.body,
     });
     const isProviderRegister = providers.some(
       (prov) => prov.email === newProvider.email
     );
     if (isProviderRegister) {
       return res.status(451).json({
-        message: "This email has already been registered",
+        message: 'This email has already been registered',
         error: true,
         data: req.body,
       });
@@ -37,17 +35,17 @@ export const createServiceProvider = async (req, res) => {
 export const getProviders = async (req, res) => {
   try {
     const providerList = await ServiceProviders.find(req.query).populate(
-      "appointments"
+      'appointments.appointment'
     );
     if (providerList.length === 0) {
       return res.status(404).json({
-        mesage: "Service Provider list is empty. Register one first!",
+        mesage: 'Service Provider list is empty. Register one first!',
         error: true,
         data: undefined,
       });
     }
     return res.status(200).json({
-      message: "Service Providers found!",
+      message: 'Service Providers found!',
       error: false,
       data: [...providerList],
     });
@@ -71,18 +69,18 @@ export const getByIdProvider = async (req, res) => {
       });
     }
     const provider = await ServiceProviders.findById(id).populate(
-      "appointments"
+      'appointments.appointment'
     );
     if (!provider) {
       return res.status(404).json({
         mesage:
-          "Service Provider not found. Try with someone else or try later!",
+          'Service Provider not found. Try with someone else or try later!',
         error: true,
         data: undefined,
       });
     }
     return res.status(200).json({
-      message: "Service Providers found!",
+      message: 'Service Providers found!',
       error: false,
       data: provider,
     });
@@ -106,17 +104,21 @@ export const updateProviderInfo = async (req, res) => {
         data: undefined,
       });
     }
-    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(id, body, { new: true });
+    const providerToUpdate = await ServiceProviders.findByIdAndUpdate(
+      id,
+      body,
+      { new: true }
+    );
 
     if (!providerToUpdate) {
       return res.status(404).json({
-        message: "User not found",
+        message: 'User not found',
         error: true,
         data: undefined,
       });
     }
     return res.status(200).json({
-      message: "Provider updated successfully!",
+      message: 'Provider updated successfully!',
       error: false,
       data: providerToUpdate,
     });
@@ -143,26 +145,51 @@ export const removeProvider = async (req, res) => {
 
     if (!provider) {
       return res.status(404).json({
-        message: "User not found",
+        message: 'User not found',
         error: true,
         data: undefined,
       });
     }
 
-    const providerDeleted = await ServiceProviders.findByIdAndUpdate(id, {
-      isActive: false,
-    });
+    const providerRemoved = await ServiceProviders.findByIdAndUpdate(
+      id,
+      {
+        isActive: false,
+      },
+      { new: true }
+    );
 
     return res.status(200).json({
-      message: "Account deleted successfully!",
+      message: 'Account deleted successfully!',
       error: false,
-      data: providerDeleted,
+      data: providerRemoved,
     });
   } catch (error) {
     res.status(500).json({
       message: `Unexpected error ${error}.`,
       error: true,
       data: undefined,
+    });
+  }
+};
+
+export const deleteProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const provider = await ServiceProviders.findByIdAndRemove(id);
+    if (!provider) {
+      return res.status(404).json({
+        message: 'Service Provider not found',
+        data: undefined,
+        error: true,
+      });
+    }
+    return res.status(204).json();
+  } catch (err) {
+    return res.status(400).json({
+      message: err || 'Error deleting Service Provider',
+      data: undefined,
+      error: true,
     });
   }
 };
