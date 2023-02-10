@@ -3,9 +3,7 @@ import { isValidObjectId } from 'mongoose';
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await Users.find(req.query).populate(
-      'appointments.appointment'
-    );
+    const users = await Users.find(req.query).populate('appointments');
     if (!users) {
       return res
         .status(404)
@@ -39,7 +37,7 @@ export const getUserById = async (req, res) => {
         .status(400)
         .json({ message: 'Invalid User ID', error: true, data: undefined });
     }
-    const user = await Users.findById(id).populate('appointments.appointment');
+    const user = await Users.findById(id).populate('appointments');
     if (!user) {
       return res
         .status(404)
@@ -61,10 +59,8 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const newUser = new Users({
-      name: req.body.name,
-      lastName: req.body.lastName,
-      phone: req.body.phone,
-      email: req.body.email,
+      ...req.body,
+      appointments: [],
     });
     const result = await newUser.save();
     return res.status(201).json({
@@ -142,7 +138,12 @@ export const updateUser = async (req, res) => {
         .status(400)
         .json({ message: 'Invalid User ID', error: true, data: undefined });
     }
-    const result = await Users.findByIdAndUpdate(id, req.body, { new: true });
+    const result = await Users.findByIdAndUpdate(
+      id,
+      { ...req.body },
+      { new: true }
+    ).populate('appointments');
+
     if (!result) {
       return res
         .status(404)
