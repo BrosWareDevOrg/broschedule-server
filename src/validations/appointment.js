@@ -13,6 +13,7 @@ export const appointmentValidation = Joi.object({
   }),
   day: Joi.date().greater('now').messages({
     'date.empty': 'Appointment should have a valid day',
+    'date.greater': 'Appointment must be greater than today',
   }),
   hourIndex: Joi.number().integer().min(0).messages({
     'string.empty': 'Appointment should have an specific hour',
@@ -41,6 +42,7 @@ export const appointmentsCreateValidation = async (req, res, next) => {
     day: Joi.date().greater('now').required().messages({
       'any.required': 'Appointment should have a valid day',
       'date.empty': 'Appointment should have a valid day',
+      'date.greater': 'Appointment must be greater than today',
     }),
     hourIndex: Joi.number().integer().min(0).required().messages({
       'any.required': 'Appointment should have an specific hour',
