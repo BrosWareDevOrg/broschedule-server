@@ -8,14 +8,15 @@ import {
   updateUser,
   removeUser,
 } from '../controllers/user.js';
+import { userCreateValidation, userEditValidation } from '../validations/user.js';
 
 const router = express.Router();
 
 router
   .get('/', getUsers)
   .get('/:id', getUserById)
-  .post('/', createUser)
-  .put('/:id', updateUser)
+  .post('/', userCreateValidation, createUser)
+  .put('/:id', userEditValidation, updateUser)
   .patch('/:id', removeUser)
   .delete('/:id', deleteUser);
 

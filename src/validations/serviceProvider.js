@@ -1,5 +1,4 @@
 import Joi from 'joi';
-// import AppointmentValidation from './appointment.js';
 
 export const providerCreateValidation = async (req, res, next) => {
   const providerSchemaValidation = Joi.object({
@@ -63,7 +62,7 @@ export const providerCreateValidation = async (req, res, next) => {
         'number.multiple':
           'Your turns amount in minutes should be a multiple of 10',
       }),
-    appointments: Joi.array().items().messages({
+    appointments: Joi.array().items(Joi.string().hex().length(24)).messages({
       'any.only': 'Appointments should contains only appointments Id',
     }),
   });
@@ -132,7 +131,7 @@ export const providerEditValidation = async (req, res, next) => {
         'number.multiple':
           'Your turns amount in minutes should be a multiple of 10',
       }),
-    appointments: Joi.array().items().messages({
+    appointments: Joi.array().items(Joi.string().hex().length(24)).messages({
       'any.only': 'Appointments should contains only appointments Id',
     }),
   });

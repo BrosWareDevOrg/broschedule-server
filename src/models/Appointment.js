@@ -6,6 +6,6 @@ const appointmentsSchema = new Schema({
   day: { type: Date, required: true },
   hourIndex: { type: Number, required: true },
   expired: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 export default mongoose.model('Appointments', appointmentsSchema);

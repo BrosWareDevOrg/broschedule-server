@@ -14,7 +14,7 @@ const serviceProviderSchema = new Schema({
     required: true
   },
   //Define an array of avaible days for work, default: [1, 2, 3, 4, 5] define an array of days between weekends day.
-  avaibleDays: {
+  availableDays: {
     type: Array,
     required: false
   },
