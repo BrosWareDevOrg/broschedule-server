@@ -35,7 +35,7 @@ export const createServiceProvider = async (req, res) => {
 export const getProviders = async (req, res) => {
   try {
     const providerList = await ServiceProviders.find(req.query).populate(
-      'appointments.appointment'
+      'appointments'
     );
     if (providerList.length === 0) {
       return res.status(404).json({
@@ -69,7 +69,7 @@ export const getByIdProvider = async (req, res) => {
       });
     }
     const provider = await ServiceProviders.findById(id).populate(
-      'appointments.appointment'
+      'appointments'
     );
     if (!provider) {
       return res.status(404).json({
