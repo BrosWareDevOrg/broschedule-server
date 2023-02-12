@@ -18,5 +18,10 @@ const httpServer = server.listen(port || 5001);
 console.log(`Server listening on port: ${port || 5001}`);
 
 //Application (web & android or Apple app) connection, this gonna be the real time connection between all apps.
-const io = new WebsocketServer(httpServer);
+const io = new WebsocketServer(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
 sockets(io);
