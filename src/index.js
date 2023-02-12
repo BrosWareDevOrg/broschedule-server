@@ -1,7 +1,8 @@
 import { app } from './app.js';
 import { Server as WebsocketServer } from 'socket.io';
+import mongooseConnect from './db.js';
 import http from 'http';
-import { mongooseConnect } from './db.js';
+import { sockets } from './sockets.js';
 
 mongooseConnect();
 
@@ -17,4 +18,5 @@ const httpServer = server.listen(port || 5001);
 console.log(`Server listening on port: ${port || 5001}`);
 
 //Application (web & android or Apple app) connection, this gonna be the real time connection between all apps.
-export const io = new WebsocketServer(httpServer);
+const io = new WebsocketServer(httpServer);
+sockets(io);

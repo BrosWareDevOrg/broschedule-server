@@ -1,6 +1,6 @@
 import { connect, set } from 'mongoose';
 
-export const mongooseConnect = async () => {
+const mongooseConnect = async () => {
   try {
     set('strictQuery', false);
     await connect(`${process.env.MONGO_URL}`);
@@ -9,3 +9,5 @@ export const mongooseConnect = async () => {
     console.log('Failed connection to database', error);
   }
 };
+
+export default mongooseConnect;
