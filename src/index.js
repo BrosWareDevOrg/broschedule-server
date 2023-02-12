@@ -1,29 +1,20 @@
-import cors from "cors";
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from 'dotenv';
-import router from "./routes/index.js";
+import { app } from './app.js';
+import { Server as WebsocketServer } from 'socket.io';
+import http from 'http';
+import { mongooseConnect } from './db.js';
 
-dotenv.config();
-
-const app = express();
-app.use(express.json());
-app.use(cors());
+mongooseConnect();
 
 const port = process.env.PORT || 5001;
 
-app.use('/api', router);
+/*
+"io" need an HTTP server to comunicate between apps.
+Insthead we need to especific with part of our "app" (from Express) want to send.
+For that we gonna import "http" from node and specific this before create our websocket server.
+*/
+const server = http.createServer(app);
+const httpServer = server.listen(port || 5001);
+console.log(`Server listening on port: ${port || 5001}`);
 
-mongoose.connect(`${process.env.MONGO_URL}`, (error) => {
-  if (error) {
-    // eslint-disable-next-line no-console
-    console.log("Failed connection to database", error);
-  } else {
-    // eslint-disable-next-line no-console
-    console.log("Connected to database");
-    app.listen(port, () => {
-      // eslint-disable-next-line no-console
-      console.log(`Server ready on port ${port}`);
-    });
-  }
-});
+//Application (web & android or Apple app) connection, this gonna be the real time connection between all apps.
+export const io = new WebsocketServer(httpServer);
