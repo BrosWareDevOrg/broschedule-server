@@ -3,20 +3,17 @@ import ServiceProviders from '../models/ServiceProviders.js';
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providers = await ServiceProviders.find(req.query);
-    const newProvider = await ServiceProviders.create({
-      ...req.body,
-    });
-    const isProviderRegister = providers.some(
-      (prov) => prov.email === newProvider.email
-    );
-    if (isProviderRegister) {
+    const providerExist = await ServiceProviders.find(req.body.email);
+    if (providerExist) {
       return res.status(451).json({
         message: 'This email has already been registered',
         error: true,
         data: req.body,
       });
     }
+    const newProvider = await ServiceProviders.create({
+      ...req.body,
+    });
     await newProvider.save();
     return res.status(201).json({
       message: `Service provider created successfully`,
