@@ -1,22 +1,38 @@
 import { isValidId } from '../helpers/idValidation.js';
 import ServiceProviders from '../models/ServiceProviders.js';
+import Users from '../models/User.js';
+import firebase from '../helpers/firebase/config.js';
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providers = await ServiceProviders.find(req.query);
-    const newProvider = await ServiceProviders.create({
-      ...req.body,
+    const providerExist = await ServiceProviders.findOne({
+      email: req.body.email,
     });
-    const isProviderRegister = providers.some(
-      (prov) => prov.email === newProvider.email
-    );
-    if (isProviderRegister) {
+    const userExist = await Users.findOne({ email: req.body.email });
+    if (providerExist || userExist) {
       return res.status(451).json({
         message: 'This email has already been registered',
         error: true,
-        data: req.body,
+        data: providerExist || userExist,
       });
     }
+
+    //Firebase auth new user
+    const newFirebaseUser = await firebase.auth().createUser({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    await firebase
+      .auth()
+      .setCustomUserClaims(newFirebaseUser.uid, { isServiceProvider: true });
+    //End firebase auth.
+    const body = { ...req.body };
+    delete body.password;
+
+    const newProvider = await ServiceProviders.create({
+      ...body,
+      firebaseUid: newFirebaseUser.uid,
+    });
     await newProvider.save();
     return res.status(201).json({
       message: `Service provider created successfully`,
@@ -176,6 +192,8 @@ export const removeProvider = async (req, res) => {
 export const deleteProvider = async (req, res) => {
   try {
     const { id } = req.params;
+    const providerToRemove = await ServiceProviders.findById(id);
+    await firebase.auth().deleteUser(providerToRemove.firebaseUid);
     const provider = await ServiceProviders.findByIdAndRemove(id);
     if (!provider) {
       return res.status(404).json({
