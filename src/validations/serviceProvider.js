@@ -31,7 +31,7 @@ export const providerCreateValidation = async (req, res, next) => {
         'string.min': 'Description must have at least 25 chars',
         'string.max': 'Description must have at most 500 chars',
       }),
-    avaibleDays: Joi.array()
+    availableDays: Joi.array()
       .items(Joi.number().valid(0, 1, 2, 3, 4, 5, 6))
       .required()
       .messages({
