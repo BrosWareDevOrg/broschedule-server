@@ -192,6 +192,8 @@ export const removeProvider = async (req, res) => {
 export const deleteProvider = async (req, res) => {
   try {
     const { id } = req.params;
+    const providerToRemove = await ServiceProviders.findById(id);
+    await firebase.auth().deleteUser(providerToRemove.firebaseUid);
     const provider = await ServiceProviders.findByIdAndRemove(id);
     if (!provider) {
       return res.status(404).json({
