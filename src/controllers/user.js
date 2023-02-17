@@ -139,6 +139,8 @@ export const removeUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const userToRemove = await Users.findById(id);
+    await firebase.auth().deleteUser(userToRemove.firebaseUid);
     const user = await Users.findByIdAndRemove(id);
     if (!user) {
       return res.status(404).json({
