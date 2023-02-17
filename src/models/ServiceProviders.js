@@ -48,6 +48,10 @@ const serviceProviderSchema = new Schema(
       required: true,
       default: true,
     },
+    firebaseUid: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
