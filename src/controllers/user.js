@@ -1,5 +1,7 @@
 import Users from '../models/User.js';
+import ServiceProviders from '../models/ServiceProviders.js';
 import { isValidObjectId } from 'mongoose';
+import firebase from '../helpers/firebase/config.js';
 
 export const getUsers = async (req, res) => {
   try {
@@ -58,9 +60,33 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
+    const userExist =
+      (await Users.find(req.body.email)) ||
+      ServiceProviders.find(req.body.email);
+    if (userExist) {
+      return res.status(451).json({
+        message: 'This email has already been registered',
+        error: true,
+        data: req.body,
+      });
+    }
+
+    //Firebase auth new User
+    const newFirebaseUser = await firebase.auth().createUser({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    await firebase
+      .auth()
+      .setCustomUserClaims(newFirebaseUser.uid, { isServiceProvider: false });
+    //End firebase auth new user
+    const body = { ...req.body };
+    delete body.password;
+
     const newUser = new Users({
-      ...req.body,
+      ...body,
       appointments: [],
+      firebaseUid: newFirebaseUser.uid,
     });
     const result = await newUser.save();
     return res.status(201).json({

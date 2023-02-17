@@ -5,19 +5,10 @@ import firebase from '../helpers/firebase/config.js';
 
 export const createServiceProvider = async (req, res) => {
   try {
-    const providerExist = await ServiceProviders.find(req.body.email);
-    if (providerExist) {
+    const userExist = await ServiceProviders.find(req.body.email) || Users.find(req.body.email);
+    if (userExist) {
       return res.status(451).json({
         message: 'This email has already been registered',
-        error: true,
-        data: req.body,
-      });
-    }
-    const isUser = await Users.find(req.body.email);
-    if (isUser) {
-      return res.status(407).json({
-        message:
-          'Email is already registed as "User", login and change profile settings.',
         error: true,
         data: req.body,
       });
