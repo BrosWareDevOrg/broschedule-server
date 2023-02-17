@@ -1,5 +1,7 @@
 import { isValidId } from '../helpers/idValidation.js';
 import ServiceProviders from '../models/ServiceProviders.js';
+import Users from '../models/User.js';
+import firebase from '../helpers/firebase/config.js';
 
 export const createServiceProvider = async (req, res) => {
   try {
@@ -11,8 +13,31 @@ export const createServiceProvider = async (req, res) => {
         data: req.body,
       });
     }
+    const isUser = await Users.find(req.body.email);
+    if (isUser) {
+      return res.status(407).json({
+        message:
+          'Email is already registed as "User", login and change profile settings.',
+        error: true,
+        data: req.body,
+      });
+    }
+
+    //Firebase auth new user
+    const newFirebaseUser = await firebase.auth().createUser({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    await firebase
+      .auth()
+      .setCustomUserClaims(newFirebaseUser.uid, { isServiceProvider: true });
+    //End firebase auth.
+    const body = { ...req.body };
+    delete body.password;
+
     const newProvider = await ServiceProviders.create({
-      ...req.body,
+      ...body,
+      firebaseUid: newFirebaseUser.uid,
     });
     await newProvider.save();
     return res.status(201).json({
