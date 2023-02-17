@@ -1,6 +1,7 @@
-import { initializeApp, credential } from 'firebase-admin';
+import admin from 'firebase-admin';
+import dotenv from 'dotenv';
 
-require('dotenv').config();
+dotenv.config();
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -15,8 +16,8 @@ const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
 };
 
-const firebaseApp = initializeApp({
-  credential: credential(serviceAccount),
+const firebaseApp = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
 });
 
 export default firebaseApp;
