@@ -1,33 +1,37 @@
-# Schedule Social App.
+# Schedulo's API REST
 
-After clone repo, open toy prefer comand console and execute:
+Schedulo is a platform that allows users to book appointments with service providers and enables service providers to manage their schedules and appointments.
 
-### Install dependencies
+Schedulo's API Rest is a web service that allows Brosware developers to interact with Schedulo's appointment booking platform programmatically. The API follows the REST architectural style, which enables developers to create, read, update, and delete resources through a set of HTTP methods, such as GET, POST, PUT, and DELETE.
 
+With Schedulo's API Rest, developers can perform various tasks programmatically, such as creating appointments, managing schedules, and retrieving information about service providers. The API is designed to be flexible and scalable, enabling developers to build custom solutions that meet their specific needs.
+
+## How to run this project
+
+#### Clone the repository
+
+    git clone https://github.com/brosware/broschedule-server.git
+
+#### Install dependencies
+
+    cd broschedule-server
     npm install
 
-### Setup environment file
-create a file at root called `.env` and add this:
+#### Setup environment file
+Create a file at root called `.env` and add the enviroment variables. You can also copy the content of `.env.example` file and add the variables.
 
     MONGO_URL=<mongo url>
     PORT=<Number 3000>
 
-### Run App
+#### Run the application
     npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### Check Lint errors
-    npm run lint
 
-### Fix Lint errors
-    npm run lint:fix
+## Tech Stack
 
-<br>
-
-## Tech
+A tech stack, short for technology stack, is a set of technologies used to build this web application. It includes a combination of programming languages, frameworks, libraries, and tools that are used to develop this API Rest.
 
 |Tech | Description  |
 | :-----: | :-----: |
@@ -46,11 +50,12 @@ You will also see any lint errors in the console.
 |Photo | Name  | Mail | Github
 | :-----: | :-----: | :-----: | :-----: |
 <img src="https://avatars.githubusercontent.com/u/84218482?v=4" height="50" width="50">| Damian Palavecino | damianpalavecino25@gmail.com | [@DamianPalavecino](https://github.com/DamianPalavecino)
-<img src="https://avatars.githubusercontent.com/u/85576085?v=4" height="50" width="50">| Ernesto Bessone | ejubessone@hotmail.com | [@eju97](https://github.com/Eju97)
 <img src="https://avatars.githubusercontent.com/u/96196361?v=4" height="50" width="50">| Julian Flores | julianfloresdev@gmail.com | [@JulianFloresDev](https://github.com/JulianFloresDev)
+<img src="https://avatars.githubusercontent.com/u/85576085?v=4" height="50" width="50">| Ernesto Bessone | ejubessone@hotmail.com | [@eju97](https://github.com/Eju97)
+
 
 <br>
 
 ### License & Copyright
 
-© Brosware Developer
+[© Brosware](https://github.com/brosware)
