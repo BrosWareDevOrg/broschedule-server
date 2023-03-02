@@ -2,7 +2,9 @@ import Appointments from '../models/Appointment.js';
 
 export const getAppointments = async (req, res) => {
   try {
-    const appointments = await Appointments.find(req.query);
+    const appointments = await Appointments.find(req.query)
+      .populate('serviceProvider')
+      .populate('client');
     if (!appointments.length) {
       return res.status(404).json({
         message: 'Appointments not found',
@@ -27,7 +29,9 @@ export const getAppointments = async (req, res) => {
 export const getAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
-    const appointment = await Appointments.findById(id);
+    const appointment = await Appointments.findById(id)
+      .populate('serviceProvider')
+      .populate('client');
     if (!appointment) {
       return res.status(404).json({
         message: 'Appointment not found',
@@ -97,7 +101,7 @@ export const deleteAppointment = async (req, res) => {
 
 export const updateAppointment = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const appointment = await Appointments.findByIdAndUpdate(
       id,
       { $set: req.body },

@@ -1,11 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
 
 const appointmentsSchema = new Schema({
-  serviceProviders: { type: Array, required: true },
-  client: { type: String, required: true },
+  serviceProvider: { _id: false, type: Schema.Types.ObjectId, ref: 'ServiceProvider', required: true },
+  client: { _id: false, type: Schema.Types.ObjectId, ref: 'Users',  required: true },
   day: { type: Date, required: true },
-  hour: { type: String, required: true },
+  hourIndex: { type: Number, required: true },
   expired: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 export default mongoose.model('Appointments', appointmentsSchema);
